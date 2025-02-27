@@ -3,12 +3,13 @@ import buttonStyles from "../StartingScreen/startingScreen.module.css";
 import logo from "../../images/lawgicIconWhite.png";
 import Input from "../../components/input/Input.jsx";
 import Button from "../../components/button/Button.jsx";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   function redirect(e) {
@@ -20,7 +21,7 @@ export default function Login() {
       alert("Some fields are empty");
       return -1;
     } else {
-      navigate("/loading");
+      navigate("/loading", { state: username });
     }
   }
 

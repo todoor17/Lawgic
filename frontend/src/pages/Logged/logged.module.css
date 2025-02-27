@@ -1,0 +1,139 @@
+.pageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 7%;
+  height: 100%;
+  background-color: #111111;
+  position: relative;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  height: 60px;
+  width: auto;
+}
+
+.right {
+  background-color: #1e1e1e;
+  width: 93%;
+  gap: 50px;
+}
+
+.rightExpanded {
+  width: 75%;
+}
+
+.leftExpanded {
+  width: 25%;
+  transition: width 0.5s;
+}
+
+.dotsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  animation: bounce 0.7s infinite ease-in-out;
+}
+
+#dot1 {
+  animation-delay: -0.16s;
+}
+
+#dot2 {
+  background-color: red;
+  animation-delay: -0.08s;
+}
+
+#dot3 {
+  animation-delay: 0s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.inputContainer {
+  position: relative;
+  width: 600px;
+  height: 150px;
+  z-index: 2;
+}
+
+.input {
+  width: 600px;
+  height: 150px;
+  outline: 0;
+  margin: 0;
+  padding: 20px 20px 0px 20px;
+  font-size: 18px;
+  text-align: justify;
+  box-shadow: 5px 5px 5px black;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.buttonsContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  height: 80px;
+  gap: 10px;
+  z-index: 1;
+  top: 75px;
+  left: 450px;
+}
+
+.button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  font-size: 35px;
+  background-color: black;
+  color: white;
+  padding-bottom: 10px;
+  box-shadow: 2px 2px gray;
+  border: 0;
+}
+
+.button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.response {
+  color: white;
+  font-size: 20px;
+}

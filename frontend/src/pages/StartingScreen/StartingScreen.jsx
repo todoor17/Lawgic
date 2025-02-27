@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./startingScreen.module.css";
 import logo from "../../images/lawgicLogoWhite.png";
 import Button from "../../components/button/Button.jsx";
@@ -13,13 +13,16 @@ export default function StartingScreen({ type }) {
     navigate(route);
   }
 
+  const location = useLocation();
+  const username = location?.state;
+
   useEffect(() => {
     if (type === "loading") {
       const interval = setInterval(() => {
         setLoadingWidth((prevWidth) => {
           if (prevWidth >= 100) {
             clearInterval(interval);
-            redirect("/logged");
+            navigate("/logged", { state: username });
             return 100;
           }
           return prevWidth + 1;
@@ -31,7 +34,7 @@ export default function StartingScreen({ type }) {
 
   useEffect(() => {
     if (loadingWidth === 100) {
-      redirect("/logged");
+      navigate("/logged", { state: username });
     }
   }, [loadingWidth, navigate]);
 
