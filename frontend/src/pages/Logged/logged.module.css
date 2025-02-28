@@ -21,8 +21,6 @@
 }
 
 .logo {
-  position: absolute;
-  top: 20px;
   height: 60px;
   width: auto;
 }
@@ -43,6 +41,8 @@
 }
 
 .dotsContainer {
+  height: 150px;
+  width: 600px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -80,57 +80,6 @@
   40% {
     transform: scale(1);
   }
-}
-
-.inputContainer {
-  position: relative;
-  width: 600px;
-  height: 150px;
-  z-index: 2;
-}
-
-.input {
-  width: 600px;
-  height: 150px;
-  outline: 0;
-  margin: 0;
-  padding: 20px 20px 0px 20px;
-  font-size: 18px;
-  text-align: justify;
-  box-shadow: 5px 5px 5px black;
-  border-radius: 20px;
-  box-sizing: border-box;
-}
-
-.buttonsContainer {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 160px;
-  height: 80px;
-  gap: 10px;
-  z-index: 1;
-  top: 75px;
-  left: 450px;
-}
-
-.button {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  font-size: 35px;
-  background-color: black;
-  color: white;
-  padding-bottom: 10px;
-  box-shadow: 2px 2px gray;
-  border: 0;
-}
-
-.button:active {
-  transform: translate(2px, 2px);
-  box-shadow: none;
 }
 
 .response {

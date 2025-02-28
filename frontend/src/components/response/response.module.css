@@ -1,0 +1,28 @@
+.responseContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 600px;
+  height: auto; /* Initial height */
+  padding: 15px; /* Add padding to the container */
+  border-radius: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  gap: 15px;
+}
+
+.textarea {
+  border: 0;
+  outline: none;
+  resize: none;
+  width: 600px;
+  min-height: 100px;
+  height: auto;
+  border-radius: 20px;
+  font-size: 18px;
+  text-align: justify;
+  padding: 15px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
