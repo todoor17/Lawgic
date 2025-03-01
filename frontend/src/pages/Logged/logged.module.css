@@ -36,8 +36,12 @@
 }
 
 .leftExpanded {
+  height: 100%;
   width: 25%;
   transition: width 0.5s;
+  justify-content: left;
+  padding: 100px;
+  gap: 100px;
 }
 
 .dotsContainer {

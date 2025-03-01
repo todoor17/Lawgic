@@ -1,12 +1,15 @@
 import styles from "./response.module.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import playIcon from "../../images/playIcon.png";
+import pauseIcon from "../../images/pauseIcon.png";
 import RoundButton from "../roundButton/RoundButton.jsx";
-import audioFile from "../../../../backend/output.mp3";
+import audio from "../../../../backend/response.mp3";
 
 export default function Response({ response }) {
+  const [isPlaying, setIsPlaying] = useState(false);
   const textAreaRef = useRef(null);
   const responseContainerRef = useRef(null);
+  const audioRef = useRef(null);
 
   const autoResize = () => {
     if (textAreaRef.current) {
@@ -28,13 +31,35 @@ export default function Response({ response }) {
   const fetchApi = async () => {
     try {
       console.log(response);
-      const responsee = await fetch(
-        `http://localhost:5000/voice?prompt=${response}`
+      await fetch(
+        `http://localhost:5000/voice?prompt=${response}&type=response`
       );
-      let audio = new Audio(audioFile);
-      audio.play();
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleAudio = async () => {
+    const audioElement = audioRef.current;
+    if (!audioElement.src) {
+      await fetchApi();
+      audioElement.src = `${audio}?${new Date().getTime()}`;
+    }
+
+    if (audioElement) {
+      audioElement.addEventListener("ended", () => {
+        setIsPlaying(false); // Update state when audio ends
+      });
+    }
+
+    if (isPlaying) {
+      // pause the audio if it's playing
+      audioElement.pause();
+      setIsPlaying(false);
+    } else {
+      // start the audio if it's paused
+      audioElement.play();
+      setIsPlaying(true);
     }
   };
 
@@ -46,7 +71,11 @@ export default function Response({ response }) {
         value={"  " + response}
         readOnly
       ></textarea>
-      <RoundButton src={playIcon} onClick={fetchApi} />
+      <RoundButton
+        src={isPlaying ? pauseIcon : playIcon}
+        onClick={handleAudio}
+      />
+      <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
 }
