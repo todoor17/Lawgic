@@ -44,6 +44,7 @@ export default function SignIn() {
       console.log(data.status);
       if (data.status === "error") {
         alert("An account with these credentials already exist.");
+        setUserInfo({ ...userInfo, username: "", email: "" });
         return;
       } else {
         alert("Account created succesfully!");

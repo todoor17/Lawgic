@@ -16,14 +16,22 @@ export default function Login() {
     navigate(e);
   }
 
-  function login() {
-    if (username === "" || password === "") {
-      alert("Some fields are empty");
-      return -1;
-    } else {
-      navigate("/loading", { state: username });
+  const login = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/login?username=${username}&password=${password}`
+      );
+      const data = await response.json();
+      if (data.status === "success") {
+        navigate("/loading");
+      } else {
+        setUsername("");
+        setPassword("");
+      }
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className={styles.pageContainer}>
@@ -36,17 +44,19 @@ export default function Login() {
             tag="Username"
             type="text"
             input={username}
-            setInput={setUsername}
+            setInput={(e) => {
+              setUsername(e.target.value);
+            }}
           />
           <Input
             tag="Password"
             type="password"
             input={password}
-            setInput={setPassword}
+            setInput={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className={buttonStyles.buttonsContainer}>
-          <Button tag="Login" onClick={() => login()} />
+          <Button tag="Login" onClick={login} />
           <Button tag="Sign in" onClick={() => redirect("/signin")} />
         </div>
       </div>

@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./logged.module.css";
 import icon from "../../images/lawgicPngWhite.png";
 import Hello from "../../components/hello/Hello.jsx";
@@ -17,6 +17,8 @@ export default function Logged() {
   const username = location?.state;
 
   const rightContainer = useRef(null);
+
+  const navigate = useNavigate();
 
   return (
     <div
