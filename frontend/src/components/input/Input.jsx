@@ -8,7 +8,7 @@ export default function Input({ tag, type, input, setInput }) {
         autoComplete="off"
         className={styles.input}
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={setInput}
       />
       <label className={styles.userLabel} htmlFor="passwordInput">
         {tag}

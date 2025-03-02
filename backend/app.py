@@ -6,9 +6,17 @@ from ollama import ChatResponse
 from flask_cors import CORS
 from gtts import gTTS
 import speech_recognition as sr
+from flask_sqlalchemy import SQLAlchemy
+import pymysql
+from sqlalchemy import text
 
 app = (Flask(__name__))
 CORS(app, origins=["http://localhost:5173"])
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:Norocel17@localhost:3306/lawgic"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 @app.route("/")
 def hello_world():
@@ -85,6 +93,41 @@ def stt():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": f"{e}"}, 500)
+
+
+def checkUniqueness(username, email):
+    username_match = 0
+    email_match = 0
+    query1 = text("SELECT COUNT(u.userId) FROM users u WHERE u.username = :username")
+    query2 = text("SELECT COUNT(u.userId) FROM users u WHERE u.email = :email")
+    with db.engine.connect() as connection:
+        username_match = connection.execute(query1, {"username": username}).scalar()
+        email_match = connection.execute(query2, {"email": email}).scalar()
+
+    if (username_match):
+        return {"status": "error", "error": "An account with that username already exists."}
+    elif (email_match):
+        return {"status": "error", "error": "An account with that email already exists."}
+
+    return {"status": "ok"}
+
+def createAccount(first_name, last_name, username, email, password):
+    query = text("INSERT INTO users(firstName, lastName, username, email, password) VALUES (:first_name, :last_name, :username, :email, :password)")
+    with db.engine.connect() as connection:
+        connection.execute(query, {"first_name": first_name, "last_name": last_name, "username": username, "email": email, "password": password})
+        connection.commit()
+
+@app.route("/signin", methods=["POST"])
+def signin():
+    dataFromServer = request.get_json(force=True)
+    unique = checkUniqueness(dataFromServer["username"], dataFromServer["email"])
+
+    if unique["status"] == "error":
+        return jsonify(unique)
+
+    createAccount(dataFromServer["firstName"], dataFromServer["lastName"], dataFromServer["username"],
+                  dataFromServer["email"], dataFromServer["password"])
+    return jsonify({"status": "success", "error": "none"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)  # Debug mode only for local testing
