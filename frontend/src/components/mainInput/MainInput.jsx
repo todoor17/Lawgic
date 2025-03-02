@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import { saveAs } from "file-saver";
 import RoundButton from "../roundButton/RoundButton.jsx";
 import audioFile from "../../../../backend/input.mp3";
+import Response from "../response/Response.jsx";
 
 export default function MainInput({
   response,
@@ -15,6 +16,9 @@ export default function MainInput({
   setPrompt,
   isLoading,
   setIsLoading,
+  responses,
+  setResponses,
+  rightContainer,
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -40,6 +44,14 @@ export default function MainInput({
     handleHeight();
   }, [prompt]);
 
+  useEffect(() => {
+    if (rightContainer.current && responses.length > 0) {
+      setTimeout(() => {
+        rightContainer.current.scrollTop = rightContainer.current.scrollHeight;
+      }, 50);
+    }
+  }, [responses, isLoading]);
+
   async function handlePrompt() {
     try {
       setIsLoading(true);
@@ -48,6 +60,7 @@ export default function MainInput({
       );
       const data = await response.json();
       setResponse(data);
+      setResponses([...responses, data]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -137,6 +150,7 @@ export default function MainInput({
     if (recordingFileName) {
       const getTranscription = async () => {
         try {
+          // add a promise to resolve the race condition between
           await new Promise((resolve) => setTimeout(resolve, 500));
 
           const response = await fetch(
@@ -153,11 +167,19 @@ export default function MainInput({
   }, [recordingFileName, setPrompt]);
 
   return (
-    <div ref={inputContainerRef} className={styles.inputContainer}>
+    <div
+      ref={inputContainerRef}
+      className={styles.inputContainer}
+      style={
+        isLoading || responses.length
+          ? { position: "absolute", bottom: "20px" }
+          : {}
+      }
+    >
       <textarea
         ref={textAreaRef}
         className={
-          prompt?.length < 38 || prompt?.length == 0
+          prompt?.length < 56 || prompt?.length == 0
             ? `${styles.input}`
             : `${styles.input} ${styles.paddingBottom}`
         }

@@ -6,6 +6,8 @@
   height: 100vh;
   margin: 0;
   padding: 0;
+  position: relative;
+  background-color: #1e1e1e;
 }
 
 .left,
@@ -17,7 +19,6 @@
   width: 7%;
   height: 100%;
   background-color: #111111;
-  position: relative;
 }
 
 .logo {
@@ -26,9 +27,31 @@
 }
 
 .right {
+  align-items: center;
   background-color: #1e1e1e;
   width: 93%;
-  gap: 50px;
+  gap: 20px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Scrollbar styling */
+.right::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+.right::-webkit-scrollbar-track {
+  background: #1e1e1e; /* Track color */
+  border-radius: 5px;
+}
+
+.right::-webkit-scrollbar-thumb {
+  background: #555; /* Thumb color */
+  border-radius: 5px;
+}
+
+.right::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Thumb color on hover */
 }
 
 .rightExpanded {
@@ -45,7 +68,7 @@
 }
 
 .dotsContainer {
-  height: 150px;
+  height: 40px;
   width: 600px;
   display: flex;
   flex-direction: row;
@@ -57,18 +80,17 @@
 .dot {
   width: 10px;
   height: 10px;
-  background-color: black;
+  background-color: white;
   border-radius: 50%;
   animation: bounce 0.7s infinite ease-in-out;
 }
 
 #dot1 {
-  animation-delay: -0.16s;
+  animation-delay: -0.32s;
 }
 
 #dot2 {
-  background-color: red;
-  animation-delay: -0.08s;
+  animation-delay: -0.16s;
 }
 
 #dot3 {

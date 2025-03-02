@@ -24,7 +24,7 @@ def gpt():
     response: ChatResponse = chat(model='llama3.2', messages=[
         {
             'role': 'user',
-            'content': f'{prompt} Answer in maximum 100 words.',
+            'content': f'{prompt}',
         },
     ])
 
@@ -66,7 +66,7 @@ def stt():
             check=True,
         )
         print("FFmpeg conversion successful.")
-        
+
     except Exception as e:
         print("Error:")
         return jsonify({"error": str(e)}, 500)

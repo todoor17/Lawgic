@@ -12,15 +12,16 @@ export default function Response({ response }) {
   const audioRef = useRef(null);
 
   const autoResize = () => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-    }
-    if (responseContainerRef.current) {
-      responseContainerRef.current.style.height = "auto";
-      responseContainerRef.current.style.height = `${
-        textAreaRef.current.scrollHeight + 80
-      }px`;
+    const words = response.split(" ");
+    if (words.length > 8) {
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = "auto";
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+      }
+      if (responseContainerRef.current) {
+        responseContainerRef.current.style.height = "auto";
+        responseContainerRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+      }
     }
   };
 
@@ -68,13 +69,20 @@ export default function Response({ response }) {
       <textarea
         ref={textAreaRef}
         className={styles.textarea}
-        value={"  " + response}
+        value={response}
         readOnly
+        style={
+          response.split(" ").length < 8
+            ? { lineHeight: "40px" }
+            : { lineHeight: "auto" }
+        }
       ></textarea>
-      <RoundButton
-        src={isPlaying ? pauseIcon : playIcon}
-        onClick={handleAudio}
-      />
+      <div className={styles.buttonContanier}>
+        <RoundButton
+          src={isPlaying ? pauseIcon : playIcon}
+          onClick={handleAudio}
+        />
+      </div>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

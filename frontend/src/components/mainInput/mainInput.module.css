@@ -3,7 +3,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 600px;
+  width: 700px;
   height: auto;
   background-color: white;
   box-shadow: 5px 5px 5px black;
@@ -11,12 +11,14 @@
 }
 
 .input {
-  width: 600px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif Arial, Helvetica,
+    sans-serif;
+  width: 700px;
   outline: none;
   border: 0;
   margin: 0;
   resize: none;
-  font-size: 18px;
+  font-size: 16px;
   padding: 20px 20px 0px 20px;
   text-align: justify;
   border-radius: 20px;
