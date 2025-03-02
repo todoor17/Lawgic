@@ -1,9 +1,9 @@
+import "./app.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StartingScreen from "./pages/StartingScreen/StartingScreen.jsx";
 import Login from "./pages/Login/Login.jsx";
 import SignIn from "./pages/SignIn/SignIn.jsx";
 import Logged from "./pages/Logged/Logged.jsx";
-import "./app.css";
 
 export default function App() {
   return (

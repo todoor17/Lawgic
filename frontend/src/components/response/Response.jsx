@@ -25,6 +25,7 @@ export default function Response({ response }) {
     }
   };
 
+  // auto resize the Response hight with every response's length change
   useEffect(() => {
     autoResize();
   }, [response]);
@@ -32,9 +33,7 @@ export default function Response({ response }) {
   const fetchApi = async () => {
     try {
       console.log(response);
-      await fetch(
-        `http://localhost:5000/voice?prompt=${response}&type=response`
-      );
+      await fetch(`http://localhost:5000/tts?prompt=${response}&type=response`);
     } catch (e) {
       console.error(e);
     }
@@ -44,12 +43,13 @@ export default function Response({ response }) {
     const audioElement = audioRef.current;
     if (!audioElement.src) {
       await fetchApi();
+      // cache busting
       audioElement.src = `${audio}?${new Date().getTime()}`;
     }
 
     if (audioElement) {
       audioElement.addEventListener("ended", () => {
-        setIsPlaying(false); // Update state when audio ends
+        setIsPlaying(false);
       });
     }
 

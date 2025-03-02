@@ -108,7 +108,10 @@
   }
 }
 
-.response {
-  color: white;
-  font-size: 20px;
+.roundButtonContainer {
+  height: auto;
+  width: auto;
+  position: absolute;
+  right: 50px;
+  top: 50px;
 }

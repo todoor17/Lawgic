@@ -1,13 +1,12 @@
 import styles from "../Login/login.module.css";
 import buttonStyles from "../StartingScreen/startingScreen.module.css";
-import { useNavigate } from "react-router-dom";
 import logo from "../../images/lawgicIconWhite.png";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Input from "../../components/input/Input.jsx";
 import Button from "../../components/button/Button.jsx";
-import { useEffect, useState } from "react";
 
 export default function SignIn() {
-  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
@@ -17,13 +16,7 @@ export default function SignIn() {
     repeatedPassword: "",
   });
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
-  function redirect(path) {
-    navigate(path);
-  }
+  const navigate = useNavigate();
 
   const signIn = async () => {
     const allFieldsAssigned = Object.values(userInfo).every(
@@ -34,6 +27,12 @@ export default function SignIn() {
       return;
     }
 
+    if (userInfo.password !== userInfo.repeatedPassword) {
+      alert("Passwords don't match");
+      setUserInfo({ ...userInfo, password: "", repeatedPassword: "" });
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/signin", {
         method: "POST",
@@ -41,7 +40,7 @@ export default function SignIn() {
         body: JSON.stringify(userInfo),
       });
       const data = await response.json();
-      console.log(data.status);
+
       if (data.status === "error") {
         alert("An account with these credentials already exist.");
         setUserInfo({ ...userInfo, username: "", email: "" });
@@ -99,7 +98,7 @@ export default function SignIn() {
           />
           <Input
             tag="Password"
-            type="text"
+            type="password"
             input={userInfo.password}
             setInput={(e) => {
               setUserInfo({ ...userInfo, password: e.target.value });
@@ -107,7 +106,7 @@ export default function SignIn() {
           />
           <Input
             tag="Repeat Passoword"
-            type="text"
+            type="password"
             input={userInfo.repeatedPassword}
             setInput={(e) => {
               setUserInfo({ ...userInfo, repeatedPassword: e.target.value });
@@ -116,7 +115,7 @@ export default function SignIn() {
         </div>
         <div className={buttonStyles.buttonsContainer}>
           <Button tag="Sign in" onClick={signIn}></Button>
-          <Button tag="" icon="home" onClick={() => redirect("/")}></Button>
+          <Button tag="" icon="home" onClick={() => navigate("/")}></Button>
         </div>
       </div>
       <div className={styles.verticalContainer}>

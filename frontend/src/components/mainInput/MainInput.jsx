@@ -7,10 +7,8 @@ import { useRef, useEffect, useState } from "react";
 import { saveAs } from "file-saver";
 import RoundButton from "../roundButton/RoundButton.jsx";
 import audioFile from "../../../../backend/input.mp3";
-import Response from "../response/Response.jsx";
 
 export default function MainInput({
-  response,
   setResponse,
   prompt,
   setPrompt,
@@ -36,14 +34,12 @@ export default function MainInput({
     }
   };
 
-  const handleChange = (e) => {
-    setPrompt(e.target.value);
-  };
-
+  // modfiy input height everytime the prompt updates
   useEffect(() => {
     handleHeight();
   }, [prompt]);
 
+  // scroll to the bottom of responses for each new response
   useEffect(() => {
     if (rightContainer.current && responses.length > 0) {
       setTimeout(() => {
@@ -56,7 +52,7 @@ export default function MainInput({
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:5000/gptt?prompt=${prompt}`
+        `http://localhost:5000/ollama?prompt=${prompt}`
       );
       const data = await response.json();
       setResponse(data);
@@ -69,10 +65,9 @@ export default function MainInput({
   }
 
   async function getSound() {
-    console.log("here");
     try {
       const response = await fetch(
-        `http://localhost:5000/voice?prompt=${prompt}&type=input`
+        `http://localhost:5000/tts?prompt=${prompt}&type=input`
       );
     } catch (e) {
       console.error(e);
@@ -81,8 +76,8 @@ export default function MainInput({
 
   const handleAudio = async () => {
     const audioElement = audioRef.current;
-
     await getSound();
+    // cache busting - force the browser load the latest version of the audio file
     audioElement.src = `${audioFile}?${new Date().getTime()}`;
 
     if (audioElement) {
@@ -108,18 +103,18 @@ export default function MainInput({
   const startRecording = async () => {
     try {
       setRecordingFileName(null);
+      // request access to the microphone
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
-      // Store stream reference for cleanup
-      const mediaStream = stream;
-
+      // collect the data in chuncks when it is available from the microphone
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
       };
 
       mediaRecorderRef.current.onstop = async () => {
+        // create a Blob from the audio chunks
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/webm",
         });
@@ -132,6 +127,7 @@ export default function MainInput({
         setRecordingFileName(fileName);
       };
 
+      // begin caturing the audio based on the above setup
       mediaRecorderRef.current.start();
       setIsRecording(true);
     } catch (error) {
@@ -146,11 +142,12 @@ export default function MainInput({
     }
   };
 
+  // the API call that provides the transcription
   useEffect(() => {
     if (recordingFileName) {
       const getTranscription = async () => {
         try {
-          // add a promise to resolve the race condition between
+          // add a promise to resolve the race condition between saving a file and searching it instantly in the backend
           await new Promise((resolve) => setTimeout(resolve, 500));
 
           const response = await fetch(
@@ -185,7 +182,7 @@ export default function MainInput({
         }
         placeholder="Ask me anything"
         value={prompt}
-        onChange={handleChange}
+        onChange={(e) => setPrompt(e.target.value)}
       ></textarea>
       <div className={styles.buttonsContainer}>
         <RoundButton

@@ -1,24 +1,24 @@
-import { useState, useRef, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./logged.module.css";
-import icon from "../../images/lawgicPngWhite.png";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import lawgicIcon from "../../images/lawgicPngWhite.png";
+import logoutIcon from "../../images/logoutIcon.png";
 import Hello from "../../components/hello/Hello.jsx";
 import Response from "../../components/response/Response.jsx";
 import MainInput from "../../components/mainInput/MainInput.jsx";
+import RoundButton from "../../components/roundButton/RoundButton.jsx";
 
 export default function Logged() {
   const [response, setResponse] = useState("");
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [responses, setResponses] = useState([]);
+
+  const navigate = useNavigate();
+  const rightContainer = useRef(null);
 
   const location = useLocation();
   const username = location?.state;
-
-  const rightContainer = useRef(null);
-
-  const navigate = useNavigate();
 
   return (
     <div
@@ -26,7 +26,7 @@ export default function Logged() {
       style={responses.length ? { alignItems: "start" } : {}}
     >
       <div className={styles.left}>
-        <img src={icon} className={styles.logo} />
+        <img src={lawgicIcon} className={styles.logo} />
       </div>
       <div
         ref={rightContainer}
@@ -67,6 +67,9 @@ export default function Logged() {
         ) : (
           ""
         )}
+        <div className={styles.roundButtonContainer}>
+          <RoundButton src={logoutIcon} onClick={() => navigate("/")} />
+        </div>
       </div>
     </div>
   );
